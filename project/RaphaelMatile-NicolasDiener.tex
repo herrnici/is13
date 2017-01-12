@@ -1,0 +1,127 @@
+\documentclass[a4paper]{article}
+
+\usepackage{style}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{textcomp}
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{rotating}
+\usepackage{textcomp} % used for tilde
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\usepackage{rotating}
+
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\footnotesize\ttfamily\linespread{0.5},        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+ % frame=single,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=Octave,                 % the language of the code
+  otherkeywords={},           % if you want to add more keywords to the set
+  numbers=none,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=4,	                   % sets default tabsize to 2 spaces
+  %title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+
+
+\title{
+\normalfont \normalsize
+\textsc{Universität Zürich} \\ [25pt]
+\horrule{0.5pt} \\[0.4cm]
+\huge Deep Learning in der Sprachtechnologie\\[0.3cm]
+\small Miniprojekt
+\horrule{2pt} \\[0.5cm]
+}
+\author{
+  Raphael Matile \\ 12-711-222 \\ raphael.matile@uzh.ch 
+  \and
+  Nicolas Diener \\ TODO \\ nicolas.diener@uzh.ch
+}
+
+
+\begin{document}
+\maketitle
+
+\section{Task Description}
+\textcolor{red}{Provide url to dataset}
+\subsection{Dataset}
+
+\subsection{Architecture Overview}
+\textcolor{red}{Elman resp. Jordan Network}
+
+\section{Evaluation}
+In the following, we shortly outline the results of our findings in two tables.
+
+\subsection{Jordan Network}
+For the detailed results, please see Table \ref{table:rnn-results-jordan} with the detailed explanations.
+
+\begin{sidewaystable}[]
+\centering
+\begin{tabular}{ccccccp{8cm}}
+\textbf{Folds} & \textbf{Learning Rate} & \textbf{Decay} & \textbf{hidden Units} & \textbf{Epochs} & \textbf{Results (F1)} & \textbf{Comments}                                                                                                                    \\
+3              & 0.0627142536696559     & false          & 100                   & 50              & 96.45/93.65           & Baseline without changes                                                                                                             \\
+3              & 0.0627142536696559     & false          & 100                   & \textbf{25}     & 95.88/93.55           & Goal: check whether we can reduce the time with similar results, having in mind the faster experimentation time for other parameters \\
+3              & 0.0627142536696559     & \textbf{1}     & 100                   & 25              & 95.65/95.65           & Introducing Conditional Decay (halving after 10 steps with no progress) incurs overfitting                                           \\
+3              & 0.0627142536696559     & false          & \textbf{200}          & 25              & 95.51/93.83           & Larger hidden layers incur overfitting                                                                                               \\
+4              & 0.0627142536696559     & false          & \textbf{100}          & 25              & 95.93/93.23           & More folds incur overfitting                                                                                                        
+\end{tabular}
+\caption{Results for the Jordan network}
+\label{table:rnn-results-jordan}
+\end{sidewaystable}
+
+
+\subsection{Elman Network}
+For the results of the Elman Network, please see the Table \ref{table:rnn-results-elman} which includes comments about each change.
+
+\begin{sidewaystable}
+\centering
+\begin{tabular}{ccccccp{8cm}}
+\textbf{Folds} & \textbf{Learning Rate} & \textbf{Hidden Units} & \textbf{Embedding Dimensions} & \textbf{Epochs} & \textbf{Results (F1)} & \textbf{Comments}                                                                                                                                                                                                                                                                                      \\
+3              & 0.1                    & 100                   & 100                           & 50              & 95.41/92.54           & Baseline without changes                                                                                                                                                                                                                                                                               \\
+3              & 0.1                    & 100                   & 100                           & \textbf{25}     & 94.01/91.58           & Goal: check whether we can reduce the time with similar results, having in mind the faster experimentation time for other parameters                                                                                                                                                                   \\
+3              & \textbf{0.001}         & 100                   & 100                           & \textbf{250}    & 69.36/66.88           & Verify, that lower learning rate requires more epochs in order to have a similar accuracy.                                                                                                                                                                                                             \\
+3              & 0.01                   & \textbf{200}          & \textbf{200}                  & 250             & 95.64/92.22           & Since the learning rate was too low, we increase it again, but at the same time, we also increase the dimensionality for the embedding                                                                                                                                                                 \\
+3              & \textbf{0.1}           & 200                   & 200                           & 250             & 96.44/92.56           & Now, using factor 5 for epochs regarding to the beginning, we see, that no big increase was made, therefore, the minimum of the cost function was already good approximated before. Also using factor 2 for the hidden units did not change the result significantly.                                  \\
+\textbf{4}     & 0.1                    & \textbf{300}          & 200                           & \textbf{50}     & 95.67/92.4            & Just increasing the hidden units compared to the initial configuration, does not really help: going broad without going deep could be an issue here                                                                                                                                                    \\
+\textbf{3}     & 0.1                    & \textbf{200}          & 200                           & \textbf{250}    & 94.29/90.24           & By using a decay, the training score already decreases, generalization is too intense, also visible in the test score. Also, using a different activation function than sigmoid (i.e. ReLu) does not improve the solution. Furthermore, we used a decay of 0.0001 which did not yield any improvement. \\
+3              & 0.1                    & 200                   & 200                           & 250             & 94.28/89.83           & By using the same decay again, but the Sigmoid-Activation function and a second Layer of the SimpleRNN provided by Keras, we still can not reach an improvement but rather a deterioration in the result.                                                                                              \\
+3              & 0.1                    & 200                   & 200                           & 250             & 95.56/91.3            & However, using sigmoid as activation function for the first and ReLu for the second layer in combination with no decay at all, we result again in a quite improvement with regards to the test set.                                                                                                    \\
+3              & 0.1                    & 200                   & 200                           & 250             & 94.94/90.5            & Interestingly enough, using a third SimpleRNN, the score performance reduces again, not only in the training but also in the evaluation set.                                                                                                                                                          
+\end{tabular}
+\caption{Results for the Elman network}
+\label{table:rnn-results-elman}
+\end{sidewaystable}
+
+\subsection{Achievend Results}
+\textcolor{red}{Provide xsl sheet}
+\textcolor{red}{Provide commented program which achieved best results}
+
+Since we did not achieve a better result than the default configuration provided
+already in the repository \footnote{https://github.com/herrnici/is13/}, we link here to the default implementation used. For the Jordan network, please see \url{https://github.com/herrnici/is13/blob/master/examples/jordan-forward.py} respective \url{https://github.com/herrnici/is13/blob/master/examples/elman-keras.py} for the Elman Network.
+
+
+\end{document}
